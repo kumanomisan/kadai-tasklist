@@ -31,7 +31,6 @@ class TasksController < ApplicationController
   
   # before_action ON
   def edit
-    set_task
   end
 
   # before_action ON
