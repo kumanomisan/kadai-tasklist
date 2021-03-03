@@ -1,13 +1,6 @@
-<% if logged_in? %>
-  
-  <h1><%= current_user.name %>さんのタスク一覧</h1>
-  
-  <%= render 'tasks/tasks', tasks: @tasks %>
-  <%= link_to "新規タスク登録を行う", new_task_path %>
-  <%= link_to "ログアウト", logout_path, method: :delete %>
 
-<% else %>
-  <%= link_to "ログインしてください",login_path, class: "btn" %>
-  <p>新規登録 <%= link_to "アカウント作成ページへ", signup_path %></p>
-<% end %>
+<h1><%= current_user.name %>さんのタスク一覧</h1>
 
+<%= render 'tasks/tasks', tasks: @tasks %>
+<%= link_to "新規タスク登録を行う", new_task_path %>
+<%= link_to "ログアウト", logout_path, method: :delete %>

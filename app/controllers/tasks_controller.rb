@@ -1,8 +1,8 @@
 class TasksController < ApplicationController
   
   #before_action
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
   #task操作上はログインしていないと操作できないように設定
+  #@taskに代入も実施
   before_action :require_user_logged_in
   before_action :correct_user, only: [:show, :destroy, :update, :edit]
   
@@ -12,19 +12,14 @@ class TasksController < ApplicationController
   
   def new
     @task = current_user.tasks.build
-    
-    p"new----------"
-    p @task
-    p"---------"
-    
   end
   
   # before_action ON
   def show
-    
   end
 
   def create
+    
     @task = current_user.tasks.build(task_params)
     
     if @task.save
@@ -34,6 +29,7 @@ class TasksController < ApplicationController
       flash.now[:danger] = "タスク登録に失敗しました"
       render :new
     end
+    
   end
   
   # before_action ON
@@ -43,9 +39,6 @@ class TasksController < ApplicationController
   # before_action ON
   def update
     
-    p"new----------"
-    p @task
-    p"---------"    
     if @task.update(task_params)
       flash[:success] = "タスク編集が完了しました！"
       redirect_to @task
@@ -53,23 +46,21 @@ class TasksController < ApplicationController
       flash.now[:danger] = "タスク編集に失敗しました"
       render :edit
     end 
+    
   end
   
   # before_action ON
   def destroy
+    
     @task.destroy
     
     flash[:success] = "タスクを削除しました"
     #redirectでprefixの時は _url
     redirect_to tasks_url
+    
   end
   
   private
-  
-  # Method of before_action
-  def set_task
-    @task = Task.find(params[:id])
-  end
 
   # strong parameter
   def task_params
@@ -79,7 +70,7 @@ class TasksController < ApplicationController
   # 操作対象が自身の持ち物であるか確認
   def correct_user
     @task = current_user.tasks.find_by(id: params[:id])
-    p"ok"
+
     unless @task
       redirect_to root_url
     end
