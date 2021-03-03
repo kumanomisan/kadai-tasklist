@@ -42,6 +42,10 @@ class TasksController < ApplicationController
 
   # before_action ON
   def update
+    
+    p"new----------"
+    p @task
+    p"---------"    
     if @task.update(task_params)
       flash[:success] = "タスク編集が完了しました！"
       redirect_to @task
