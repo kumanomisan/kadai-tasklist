@@ -2,22 +2,30 @@ class TasksController < ApplicationController
   
   #before_action
   before_action :set_task, only: [:show, :edit, :update, :destroy]
-  
+  #task操作上はログインしていないと操作できないように設定
+  before_action :require_user_logged_in
+  before_action :correct_user, only: [:show, :destroy, :update, :edit]
   
   def index
-    @tasks = Task.all
+    @tasks = current_user.tasks.page(params[:page]).per(10)
+  end
+  
+  def new
+    @task = current_user.tasks.build
+    
+    p"new----------"
+    p @task
+    p"---------"
+    
   end
   
   # before_action ON
   def show
-  end
-
-  def new
-    @task = Task.new
+    
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params)
     
     if @task.save
       flash[:success] = "タスク登録が完了しました！"
@@ -26,7 +34,6 @@ class TasksController < ApplicationController
       flash.now[:danger] = "タスク登録に失敗しました"
       render :new
     end
-    
   end
   
   # before_action ON
@@ -58,11 +65,21 @@ class TasksController < ApplicationController
   # Method of before_action
   def set_task
     @task = Task.find(params[:id])
-  end   
-  
+  end
+
   # strong parameter
   def task_params
-    params.require(:task).permit(:content,:status)
+    params.require(:task).permit(:content, :status)
+  end
+  
+  # 操作対象が自身の持ち物であるか確認
+  def correct_user
+    @task = current_user.tasks.find_by(id: params[:id])
+    p"ok"
+    unless @task
+      redirect_to root_url
+    end
+    
   end
 
 end
