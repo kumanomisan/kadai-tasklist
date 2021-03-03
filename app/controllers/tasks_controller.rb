@@ -45,7 +45,7 @@ class TasksController < ApplicationController
     else
       flash.now[:danger] = "タスク編集に失敗しました"
       render :edit
-    end 
+    end
     
   end
   
